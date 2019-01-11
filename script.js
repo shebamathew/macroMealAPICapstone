@@ -98,7 +98,7 @@ function searchNutrient() {
 //     }
 //   }
 
-function getNutrientInfo() {
+function getNutrientInfo(responseJson) {
     const nutrientInfo = responseJson.report.foods; 
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
     for (let i = 0; i < nutrientInfo.length; i++) {
