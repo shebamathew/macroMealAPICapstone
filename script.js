@@ -1,13 +1,21 @@
 'use strict';
 
-
 function searchNutrient() { 
-    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=203&sort=c&fg=5&max=5`)
+    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=203&sort=c`)
         .then(response => response.json())
         .then(responseJson => getNutrientInfo(responseJson))
         // .then(responseJson => console.log(responseJson.report.foods[0].name))
         // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
         .catch(error => console.error(error));
+}
+
+function searchFood(){
+    fetch(`https://api.edamam.com/search?q=turkey&app_id=4d646771&app_key=3eb644f27fc05523aa0687b2a0361dd9`)
+        .then(response => response.json())
+        .then(jsonData => console.log(jsonData))
+        .catch(error => console.error(error));
+        // .then(responseJson => console.log(responseJson.report.foods[0].name))
+        // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
 }
 
 // const nutrientSearchResult = {
@@ -103,7 +111,7 @@ function getNutrientInfo(responseJson) {
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
     for (let i = 0; i < nutrientInfo.length; i++) {
         if (nutrientAmt == 29.51) {
-            console.log(`${nutrientInfo[i].name} : ${nutrientAmt}`); 
+            console.log(`${nutrientInfo[i].name} : ${nutrientAmt}g per 100g`); 
         }
         else {
             console.log('Not found'); 
@@ -115,6 +123,7 @@ function watchForm() {
     $('form').submit(event => {
       event.preventDefault();
       searchNutrient();
+      searchFood(); 
     });
 }
 
