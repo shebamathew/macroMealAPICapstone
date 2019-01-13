@@ -38,7 +38,6 @@ function getNutrientInfo(responseJson) {
     }
 }
 
-
 const recipeResults = {
     "q": "turkey",
     "from": 0,
@@ -6384,16 +6383,27 @@ function calculateIngredients(recipeResults) {
     const servingSize = mainIngredient.weight/100;
     const ingredientList = recipeResults.hits[3].recipe.ingredients; 
     for (let i = 0; i < ingredientList.length; i++){
-       console.log(ingredientList[i].weight/servingSize); 
+        ingredientList[i].weight = ingredientList[i].weight/servingSize; 
+        console.log(`${ingredientList[i].weight}g of ${ingredientList[i].text}`); 
     }
+}
+
+function getNutritionFacts(recipeResults) {
+    const nutritionFacts = recipeResults.hits[3].totalNutrients; 
+    Object.keys(nutritionFacts).forEach(function (item) {
+        if (item == FAT) {
+            console.log(item); 
+        }
+    }); 
 }
 
 function watchForm() {
     $('form').submit(event => {
       event.preventDefault();
-    //   searchNutrient();
+      getNutritionFacts(recipeResults); 
+    // searchNutrient();
     // searchFood(); 
-    calculateIngredients(recipeResults);
+    // calculateIngredients(recipeResults);
     // getRecipe(recipeResults); 
     });
 }
