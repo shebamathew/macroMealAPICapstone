@@ -21,16 +21,11 @@ function searchFood(){
 }
 
 function getNutrientInfo(responseJson) {
-    if (!responseJson){
-        console.log("This doesn't exist"); 
-    }
     const nutrientInfo = responseJson.report.foods; 
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
-    const foodsMatchingNutrientSearch = []; 
     for (let i = 0; i < nutrientInfo.length; i++) {
         if (nutrientAmt == 29.51) {
             console.log(nutrientInfo[i].name); 
-            // foodsMatchingNutrientSearch.push(nutrientInfo[i].name); 
         }
         else {
             console.log('Not found'); 
@@ -6400,11 +6395,11 @@ function getNutritionFacts(recipeResults) {
 function watchForm() {
     $('form').submit(event => {
       event.preventDefault();
-      getNutritionFacts(recipeResults); 
-    // searchNutrient();
+    searchNutrient($('#macroProtein').val());
     // searchFood(); 
-    // calculateIngredients(recipeResults);
     // getRecipe(recipeResults); 
+    // calculateIngredients(recipeResults);
+    // getNutritionFacts(recipeResults); 
     });
 }
 
