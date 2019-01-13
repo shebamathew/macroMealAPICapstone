@@ -1,7 +1,10 @@
 'use strict';
 
 function searchNutrient() { 
-    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=203&sort=c`)
+    const proteinID = 203; 
+    const fatID = 204; 
+    const carbID = 205; 
+    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=${proteinID}&sort=c`)
         .then(response => response.json())
         .then(responseJson => getNutrientInfo(responseJson))
         // .then(responseJson => console.log(responseJson))
