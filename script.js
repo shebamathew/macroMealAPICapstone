@@ -1,10 +1,11 @@
 'use strict';
 //GET request to USDA NDB API
 function searchNutrient() { 
+    const apiKey = "DEMO_KEY"; 
     const proteinID = 203; 
     const fatID = 204; 
     const carbID = 205; 
-    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=${proteinID}&sort=c`)
+    fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=${apiKey}&nutrients=${proteinID}&nutrients=${carbID}&nutrients=${fatID}&sort=c`)
         .then(response => response.json())
         .then(responseJson => getNutrientInfo(responseJson))
         // .then(responseJson => console.log(responseJson))
@@ -27,16 +28,18 @@ function getNutrientInfo(responseJson) {
     const nutrientInfo = responseJson.report.foods; 
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
     const proteinInput = $('#macroProtein').val()
-    $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`); 
+    $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`);
+    const foodMatch = [] 
     for (let i = 0; i < nutrientInfo.length; i++) {
         if (nutrientAmt == proteinInput) {
-            $('#foodResults-List').append(`<li> ${nutrientInfo[i].name} </li>`); 
+            foodMatch.push(nutrientInfo[i].name); 
         }
         else {
-            console.log('Not found'); 
+            throw 'No food found'; 
         }
     }
-    $('#foodResults').removeClass('hidden');
+    console.log(foodMatch);
+    // $('#foodResults').attr('hidden', false);
 }
 
 //Finds recipes with foods that match nutritional criteria 
