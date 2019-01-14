@@ -6,14 +6,45 @@ function searchNutrient() {
     const fatID = 204; 
     const carbID = 205; 
     fetch(`http://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=${apiKey}&nutrients=${proteinID}&nutrients=${carbID}&nutrients=${fatID}&sort=c`)
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok) {
+                return response.json(); 
+            }
+            throw new Error(response.statusText); 
+        })
         .then(responseJson => getNutrientInfo(responseJson))
         // .then(responseJson => console.log(responseJson))
         // .then(responseJson => console.log(responseJson.report.foods[0].name))
         // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
-        .catch(error => console.error(error));
+        .catch(err => {
+            $('#js-error-message').text(`Something went wrong: ${err.message}`);
+        });
 }
-//GET request to Edamam Recipe API 
+
+//Finds and returns foods that match nutritional critera 
+function getNutrientInfo(responseJson) {
+    const nutrientInfo = responseJson.report.foods; //convert to array?
+    const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
+    const proteinInput = $('#macroProtein').val()
+    const fatInput = $('#macroFat').val()
+    const carbInput = $('#macroCarb').val()
+    // $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`);
+    const foodMatch = [] 
+    for (let i = 0; i < nutrientInfo.length; i++) {
+        if (nutrientAmt < proteinInput+2 && nutrientAmt > proteinInput-2) {
+            foodMatch.push(nutrientInfo[i].name); 
+        }
+        else {
+            throw 'No food found'; 
+        }
+    }
+    // console.log(foodMatch);
+    // for i in foodMatch
+    // .map(Str.split(","))
+    // $('#foodResults').attr('hidden', false);
+}
+
+//GET request to Edamam Recipe API for recipes 
 function searchFood(){
     fetch(`https://api.edamam.com/search?q=turkey&app_id=4d646771&app_key=3eb644f27fc05523aa0687b2a0361dd9`)
         .then(response => response.json())
@@ -22,24 +53,6 @@ function searchFood(){
         .catch(error => console.error(error));
         // .then(responseJson => console.log(responseJson.report.foods[0].name))
         // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
-}
-//Finds and returns foods that match nutritional critera 
-function getNutrientInfo(responseJson) {
-    const nutrientInfo = responseJson.report.foods; 
-    const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
-    const proteinInput = $('#macroProtein').val()
-    $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`);
-    const foodMatch = [] 
-    for (let i = 0; i < nutrientInfo.length; i++) {
-        if (nutrientAmt == proteinInput) {
-            foodMatch.push(nutrientInfo[i].name); 
-        }
-        else {
-            throw 'No food found'; 
-        }
-    }
-    console.log(foodMatch);
-    // $('#foodResults').attr('hidden', false);
 }
 
 //Finds recipes with foods that match nutritional criteria 
