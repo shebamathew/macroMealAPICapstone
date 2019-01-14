@@ -1,5 +1,5 @@
 'use strict';
-
+//GET request to USDA NDB API
 function searchNutrient() { 
     const proteinID = 203; 
     const fatID = 204; 
@@ -12,7 +12,7 @@ function searchNutrient() {
         // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
         .catch(error => console.error(error));
 }
-
+//GET request to Edamam Recipe API 
 function searchFood(){
     fetch(`https://api.edamam.com/search?q=turkey&app_id=4d646771&app_key=3eb644f27fc05523aa0687b2a0361dd9`)
         .then(response => response.json())
@@ -22,20 +22,24 @@ function searchFood(){
         // .then(responseJson => console.log(responseJson.report.foods[0].name))
         // .then(responseJson => console.log(responseJson.report.foods[0].nutrients[0].gm))
 }
-
+//Finds and returns foods that match nutritional critera 
 function getNutrientInfo(responseJson) {
     const nutrientInfo = responseJson.report.foods; 
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
+    const proteinInput = $('#macroProtein').val()
+    $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`); 
     for (let i = 0; i < nutrientInfo.length; i++) {
-        if (nutrientAmt == 29.51) {
-            console.log(nutrientInfo[i].name); 
+        if (nutrientAmt == proteinInput) {
+            $('#foodResults-List').append(`<li> ${nutrientInfo[i].name} </li>`); 
         }
         else {
             console.log('Not found'); 
         }
     }
+    $('#foodResults').removeClass('hidden');
 }
 
+//Finds recipes with foods that match nutritional criteria 
 const recipeResults = {
     "q": "turkey",
     "from": 0,
@@ -6376,6 +6380,7 @@ function getRecipe(recipeResults) {
     // console.log(`${recipeName} with ${mainIngredient.weight} of ${mainIngredient.text}`); 
 }
 
+//Calculates Nutrition Info of Recipe 
 function calculateIngredients(recipeResults) {
     const mainIngredient = recipeResults.hits[3].recipe.ingredients[0]; 
     const servingSize = mainIngredient.weight/100;
@@ -6385,7 +6390,7 @@ function calculateIngredients(recipeResults) {
         console.log(`${ingredientList[i].weight}g of ${ingredientList[i].text}`); 
     }
 }
-
+//Returns Macros of Recipe 
 function getNutritionFacts(recipeResults) {
     const nutritionFacts = recipeResults.hits[3].totalNutrients; 
     Object.keys(nutritionFacts).forEach(function (item) {
