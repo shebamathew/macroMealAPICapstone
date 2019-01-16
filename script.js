@@ -25,23 +25,187 @@ function searchNutrient() {
 function getNutrientInfo(responseJson) {
     const nutrientInfo = responseJson.report.foods; //convert to array?
     const nutrientAmt = responseJson.report.foods[0].nutrients[0].gm; 
-    const proteinInput = $('#macroProtein').val()
+    const proteinInput = parseInt($('#macroProtein').val(), 10); 
     const fatInput = $('#macroFat').val()
     const carbInput = $('#macroCarb').val()
     // $('#foodResults-List').append(`100g of these foods have ${proteinInput}g protein`);
-    const foodMatch = [] 
+    // $('#foodResults').attr('hidden', false);
+    const foodMatch = []; 
     for (let i = 0; i < nutrientInfo.length; i++) {
-        if (nutrientAmt < proteinInput+2 && nutrientAmt > proteinInput-2) {
+        if (nutrientAmt == 31.1) {
+            console.log('test'); 
             foodMatch.push(nutrientInfo[i].name); 
         }
         else {
             throw 'No food found'; 
         }
     }
-    // console.log(foodMatch);
-    // for i in foodMatch
-    // .map(Str.split(","))
-    // $('#foodResults').attr('hidden', false);
+    getSearchTerms(foodMatch); 
+}
+
+// // const foodMatchStored = [
+//     "Turkey, retail parts, breast, meat only, cooked, roasted",
+//     "Restaurant, Chinese, orange chicken",
+//     "Egg, white, dried, stabilized, glucose reduced",
+//     "Egg, white, dried, powder, stabilized, glucose reduced",
+//     "Restaurant, Chinese, sesame chicken",
+//     "Restaurant, Chinese, lemon chicken",
+//     "Restaurant, Chinese, sweet and sour chicken",
+//     "Restaurant, Chinese, general tso's chicken",
+//     "Soybeans, mature seeds, raw",
+//     "Soybeans, mature seeds, roasted, no salt added",
+//     "Soybeans, mature seeds, roasted, salted",
+//     "Salmon, red (sockeye), filets with skin, smoked (Alaska Native)",
+//     "Lupins, mature seeds, raw",
+//     "CARRABBA'S ITALIAN GRILL, chicken parmesan without cavatappi pasta",
+//     "Seaweed, spirulina, dried",
+//     "Beef, chuck, blade roast, separable lean and fat, trimmed to 0\" fat, all grades, cooked, braised",
+//     "Soy meal, defatted, raw",
+//     "Restaurant, Chinese, kung pao chicken",
+//     "BURGER KING, DOUBLE WHOPPER, with cheese",
+//     "Restaurant, Chinese, chicken and vegetables",
+//     "Fast Foods, cheeseburger; double, large patty; with condiments, vegetables and mayonnaise",
+//     "T.G.I. FRIDAY'S, classic sirloin steak (10 oz)",
+//     "Restaurant, Chinese, sweet and sour pork",
+//     "Soy flour, defatted",
+//     "Winged beans, mature seeds, raw",
+//     "Mungo beans, mature seeds, raw",
+//     "Fast foods, hamburger; double, large patty; with condiments, vegetables and mayonnaise",
+//     "BURGER KING, DOUBLE WHOPPER, no cheese",
+//     "WENDY'S, CLASSIC DOUBLE, with cheese",
+//     "Hyacinth beans, mature seeds, raw",
+//     "Beverages, Whey protein powder isolate",
+//     "Restaurant, Italian, lasagna with meat",
+//     "Restaurant, family style, sirloin steak",
+//     "Mung beans, mature seeds, raw",
+//     "Restaurant, Italian, chicken parmesan without pasta",
+//     "Seeds, cottonseed kernels, roasted (glandless)",
+//     "Fast Foods, Fried Chicken, Breast, meat and skin and breading",
+//     "OLIVE GARDEN, lasagna classico",
+//     "CRACKER BARREL, grilled sirloin steak",
+//     "Fast foods, cheeseburger; double, large patty; with condiments",
+//     "McDONALD'S, DOUBLE QUARTER POUNDER with Cheese",
+//     "Lentils, raw",
+//     "Beans, white, mature seeds, raw",
+//     "Chicken, broilers or fryers, giblets, cooked, fried",
+//     "Beans, kidney, royal red, mature seeds, raw",
+//     "OLIVE GARDEN, chicken parmigiana without pasta",
+//     "KFC, Fried Chicken, ORIGINAL RECIPE, Breast, meat and skin with breading",
+//     "Beans, navy, mature seeds, raw",
+//     "Chicken, stewing, light meat, meat only, cooked, stewed",
+//     "Fast foods, grilled chicken, bacon and tomato club sandwich, with cheese, lettuce, and mayonnaise",
+//     "Chicken, broilers or fryers, light meat, meat only, cooked, fried",
+//     "Lentils, pink or red, raw",
+//     "CARRABBA'S ITALIAN GRILL, lasagne",
+//     "Kielbasa, fully cooked, pan-fried",
+//     "Beans, small white, mature seeds, raw",
+//     "Pheasant, cooked, total edible",
+//     "Peas, green, split, mature seeds, raw",
+//     "KFC, Fried Chicken, EXTRA CRISPY, Breast, meat and skin with breading",
+//     "Mothbeans, mature seeds, raw",
+//     "Beans, cranberry (roman), mature seeds, raw",
+//     "Beans, kidney, california red, mature seeds, raw",
+//     "Pigeon peas (red gram), mature seeds, raw",
+//     "DENNY'S, spaghetti and meatballs",
+//     "Chicken, gizzard, all classes, cooked, simmered",
+//     "Fast foods, submarine sandwich, turkey, roast beef and ham on white bread with lettuce and tomato",
+//     "Beans, pink, mature seeds, raw",
+//     "Squab, (pigeon), meat only, raw",
+//     "Soy flour, low-fat",
+//     "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+//     "Beans, kidney, all types, mature seeds, raw",
+//     "Fish, yellowtail, mixed species, cooked, dry heat",
+//     "Chicken, broilers or fryers, light meat, meat only, cooked, roasted",
+//     "Pork, fresh, loin, top loin (chops), boneless, separable lean only, cooked, pan-fried",
+//     "Beans, yellow, mature seeds, raw",
+//     "Chicken, broilers or fryers, meat only, cooked, fried",
+//     "ON THE BORDER, soft taco with ground beef, cheese and lettuce",
+//     "Fish, tuna, light, canned in oil, drained solids",
+//     "APPLEBEE'S, 9 oz house sirloin steak",
+//     "POPEYES, Fried Chicken, Mild, Breast, meat and skin with breading",
+//     "T.G.I. FRIDAY'S, chicken fingers",
+//     "Lamb, foreshank, separable lean and fat, trimmed to 1/4\" fat, choice, cooked, braised",
+//     "Lamb, foreshank, separable lean and fat, trimmed to 1/8\" fat, cooked, braised",
+//     "Beans, black, mature seeds, raw",
+//     "Chicken, broilers or fryers, breast, meat and skin, cooked, roasted",
+//     "Fast foods, crispy chicken, bacon, and tomato club sandwich, with cheese, lettuce, and mayonnaise",
+//     "Lima beans, thin seeded (baby), mature seeds, raw",
+//     "Cheese, parmesan, low sodium",
+//     "Beans, kidney, red, mature seeds, raw",
+//     "Goose, domesticated, meat only, cooked, roasted",
+//     "Beans, pinto, mature seeds, raw (Includes foods for USDA's Food Distribution Program)",
+//     "Pork, fresh, loin, top loin (chops), boneless, separable lean only, cooked, braised",
+//     "Peanuts, spanish, oil-roasted, with salt",
+//     "Peanuts, spanish, oil-roasted, without salt",
+//     "APPLEBEE'S, chicken tenders platter",
+//     "Egg, whole, dried, stabilized, glucose reduced",
+//     "Chickpeas (garbanzo beans, bengal gram), mature seeds, raw",
+//     "KFC, Fried Chicken, ORIGINAL RECIPE, Breast, meat only, skin and breading removed",
+//     "Egg, whole, dried",
+//     "CRACKER BARREL, farm raised catfish platter",
+//     "Restaurant, Chinese, chicken chow mein",
+//     "Lamb, rib, separable lean only, trimmed to 1/4\" fat, choice, cooked, broiled",
+//     "Restaurant, Chinese, beef and vegetables",
+//     "Yardlong beans, mature seeds, raw",
+//     "Chicken, broilers or fryers, dark meat, meat only, cooked, fried",
+//     "Chicken, broilers or fryers, breast, meat only, cooked, stewed",
+//     "Mollusks, whelk, unspecified, cooked, moist heat",
+//     "Fast foods, bagel, with breakfast steak, egg, cheese, and condiments",
+//     "Chicken, broilers or fryers, meat only, cooked, roasted",
+//     "Chicken, broilers or fryers, light meat, meat only, cooked, stewed",
+//     "Peanuts, all types, oil-roasted, with salt",
+//     "Peanuts, all types, oil-roasted, without salt",
+//     "Pork, fresh, loin, country-style ribs, separable lean only, bone-in, cooked, roasted",
+//     "Soybeans, mature seeds, dry roasted",
+//     "Beans, great northern, mature seeds, raw (Includes foods for USDA's Food Distribution Program)",
+//     "Pork, fresh, loin, top loin (chops), boneless, separable lean only, cooked, broiled",
+//     "Fast Foods, grilled chicken filet sandwich, with lettuce, tomato and spread",
+//     "Cowpeas, catjang, mature seeds, raw",
+//     "Chicken, meatless",
+//     "Pork, fresh, leg (ham), whole, separable lean only, cooked, roasted",
+//     "Lamb, foreshank, separable lean only, trimmed to 1/4\" fat, choice, cooked, braised",
+//     "Fast Foods, Fried Chicken, Breast, meat only, skin and breading removed",
+//     "Pork, fresh, loin, top loin (chops), boneless, separable lean and fat, cooked, braised",
+//     "Chicken, stewing, dark meat, meat only, cooked, stewed",
+//     "Cowpeas, common (blackeyes, crowder, southern), mature seeds, raw",
+//     "Broadbeans (fava beans), mature seeds, raw",
+//     "Beans, adzuki, mature seeds, raw",
+//     "Beans, black turtle, mature seeds, raw",
+//     "Pork, fresh, loin, center loin (chops), bone-in, separable lean only, cooked, broiled",
+//     "Seeds, pumpkin and squash seed kernels, dried",
+//     "Peanuts, valencia, oil-roasted, without salt",
+//     "Peanuts, valencia, oil-roasted, with salt",
+//     "Chicken, roasting, giblets, cooked, simmered",
+//     "Pork, fresh, loin, top loin (chops), boneless, separable lean and fat, cooked, broiled",
+//     "Seeds, cottonseed flour, partially defatted (glandless)",
+//     "Chicken, broilers or fryers, breast, meat and skin, cooked, stewed",
+//     "Chicken, broilers or fryers, dark meat, meat only, cooked, roasted",
+//     "Chicken, heart, all classes, cooked, simmered",
+//     "Chicken, capons, giblets, cooked, simmered",
+//     "POPEYES, Fried Chicken, Mild, Breast, meat only, skin and breading removed",
+//     "Chicken, broilers or fryers, meat only, cooked, stewed",
+//     "Lima beans, large, mature seeds, raw",
+//     "Peanuts, spanish, raw",
+//     "KFC, Fried Chicken, EXTRA CRISPY, Breast, meat only, skin and breading removed",
+//     "Chicken, roasting, light meat, meat only, cooked, roasted",
+//     "Restaurant, family style, chicken tenders",
+//     "Chicken, stewing, giblets, cooked, simmered",
+//     "Turkey, all classes, back, meat and skin, cooked, roasted",
+//     "Cheese, monterey, low fat",
+//     "Beef, rib, shortribs, separable lean only, choice, cooked, braised",
+//     "DENNY'S, chicken strips"
+//   ]; 
+
+function getSearchTerms(foodMatch){
+    const firstWord = []; 
+    for (let i = 0; i < foodMatch.length; i++) {
+      firstWord.push(foodMatch[i].split(",")); 
+    }
+    const searchTerms = []; 
+    for (let i = 0; i < firstWord.length; i++) {
+      searchTerms.push(firstWord[i][0]); 
+    }
+    console.log(searchTerms); 
 }
 
 //GET request to Edamam Recipe API for recipes 
